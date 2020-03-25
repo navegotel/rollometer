@@ -6,7 +6,6 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BASE_URL = 'rollometer'
 
 
 # Quick-start development settings - unsuitable for production
@@ -18,7 +17,7 @@ SECRET_KEY = '($eha57x2xr%i4u$vl&26m1p7=1#6dqgd1iu)8i)dy#vxc2eil'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['markusbarth.net', 'www.markusbarth.net', 'localhost']
+ALLOWED_HOSTS = ['rollometer.markusbarth.net']
 
 
 # Application definition
