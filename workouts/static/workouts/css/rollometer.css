@@ -1,0 +1,36 @@
+.rmtr-chronodigits-big{
+    padding: 1;
+    margin: 1;
+    text-align: center;
+    font-weight: bold;
+    font-size: 30vmin;
+}
+
+.rmtr-chronodigits-medium{
+    padding: 1;
+    margin: 1;
+    text-align: center;
+    font-weight: bold;
+    font-size: 10vmin;
+}
+
+.rmtr-chronoinfo-big{
+    padding: 1;
+    margin: 1;
+    text-align: center;
+    font-weight: bold;
+    font-size: 10vmin;
+}
+
+.rmtr-chronoinfo-small{
+    padding: 1;
+    margin: 1;
+    text-align: center;
+    color: grey;
+    font-weight: bold;
+    font-size: 5vmin;
+}
+
+.exercise-list-item{
+    font-weight: bold;
+}

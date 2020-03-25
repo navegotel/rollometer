@@ -1,0 +1,175 @@
+{% extends "workouts/base.html" %}
+{% load static %}
+    {% block nav %}
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+            <a class="navbar-brand collapse-1" href="#">
+                <img src="{% static 'workouts/img/logo_white.svg' %}" width="30" height="30" alt="">
+            </a>
+            <div class="navbar-nav w-100 order-1 order-md-0 dual-collapse2">
+                <a class="nav-item nav-link" href="{% url 'index' %}">Workouts</a>
+                <a class="nav-item nav-link" onclick="runWorkout()" href="#">Start</a>
+                <a class="nav-item nav-link" onclick="stopWorkout()" href="#">Stop</a>
+            </div>
+            <div class="navbar-collapse w-100 order-3 dual-collapse2">
+                    <div class="navbar-nav ml-auto">
+                        <a class="nav-item nav-link" href="#">login</a>
+                    </div>
+            </div>
+        </nav>
+    {% endblock %}
+    {% block content %}
+        <div class="container-fluid">
+            <div>
+                <p class="rmtr-chronodigits-medium"><span id="totalMinutes">00</span>:<span id="totalSeconds">00</span></p>
+            </div>
+            <div>
+                <p class="rmtr-chronodigits-big"><span id="minutes">00</span>:<span id="seconds">00</span></p>
+            </div>
+            <div>
+                <p class="rmtr-chronoinfo-big"><span id="currentWorkout"></span></p>
+                <p class="rmtr-chronoinfo-small"><span id="nextWorkout"></span></p>
+            </div>
+        </div>
+    {% endblock %}
+    {% block script %}
+        <script type="text/javascript">
+        var workoutItems = [
+        {% for exercise in workout.exercises.all %}
+            {
+                'label': '{{exercise.name}}',
+                'duration': {{exercise.duration}},
+                'break': {{exercise.pause}}
+            },
+        {% endfor %}
+        ];
+        var bleep = new Audio("{% static 'workouts/snd/bleep001.mp3' %}")
+        var bell = new Audio("{% static 'workouts/snd/bell001.mp3' %}")
+        var seconds = workoutItems[0]['duration'];
+        var isRunning = false;
+        var isBreak = false;
+        var totalSeconds = 0;
+        workoutItems.forEach(function(item, index){
+            totalSeconds += item['duration'] + item['break'];
+        });
+        var timer;
+        var index = 0;
+        var seconds = workoutItems[0]['duration'];
+
+        function refreshCounter(){
+            if (seconds / 60 < 10){
+                mntStr = "0" + Math.floor(seconds/60);
+            }else{
+                mntStr = "" + Math.floor(seconds/60);
+            }
+            if (seconds % 60 < 10){
+                scdStr = "0" + Math.floor(seconds % 60);
+            }else{
+                scdStr = "" + Math.floor(seconds % 60);
+            }
+            if (totalSeconds / 60 < 10){
+                ttlMntStr = "0" + Math.floor(totalSeconds/60);
+            }else{
+                ttlMntStr = "" + Math.floor(totalSeconds/60);
+            }
+            if (totalSeconds % 60 < 10){
+                ttlScdStr = "0" + Math.floor(totalSeconds % 60);
+            }else{
+                ttlScdStr = "" + Math.floor(totalSeconds % 60);
+            }
+            $("#minutes").text(mntStr);
+            $("#seconds").text(scdStr);
+            $("#totalMinutes").text(ttlMntStr);
+            $("#totalSeconds").text(ttlScdStr);
+        };
+
+        function stopWorkout(){
+            clearInterval(timer);
+            seconds = workoutItems[0]['duration'];
+            isRunning = false;
+            isBreak = false;
+            index = 0;
+            totalSeconds = 0;
+            workoutItems.forEach(function(item, index){
+                totalSeconds += item['duration'] + item['break'];
+            });
+            refreshCounter();
+            $("#currentWorkout").text(workoutItems[index]['label']);
+            if (index < workoutItems.length){
+                $("#nextWorkout").text(workoutItems[index + 1]['label']);
+            } else {
+                $("#nextWorkout").text("Finished");
+            }
+        };
+
+        function runWorkout(){
+            if (isRunning == true){
+                return;
+            }
+            isRunning = true;
+            $("#currentWorkout").text(workoutItems[index]['label']);
+            if (index < workoutItems.length){
+                $("#nextWorkout").text(workoutItems[index + 1]['label']);
+            } else {
+                $("#nextWorkout").text("Finished");
+            }
+            timer = setInterval(function(){
+                if (seconds / 60 < 10){
+                    mntStr = "0" + Math.floor(seconds/60);
+                }else{
+                    mntStr = "" + Math.floor(seconds/60);
+                }
+                if (seconds % 60 < 10){
+                    scdStr = "0" + Math.floor(seconds % 60);
+                }else{
+                    scdStr = "" + Math.floor(seconds % 60);
+                }
+                if (totalSeconds / 60 < 10){
+                    ttlMntStr = "0" + Math.floor(totalSeconds/60);
+                }else{
+                    ttlMntStr = "" + Math.floor(totalSeconds/60);
+                }
+                if (totalSeconds % 60 < 10){
+                    ttlScdStr = "0" + Math.floor(totalSeconds % 60);
+                }else{
+                    ttlScdStr = "" + Math.floor(totalSeconds % 60);
+                }
+                $("#minutes").text(mntStr);
+                $("#seconds").text(scdStr);
+                $("#totalMinutes").text(ttlMntStr);
+                $("#totalSeconds").text(ttlScdStr);
+                if (seconds == 5){
+                    bleep.play();
+                }
+                if (seconds > 0){
+                    seconds--;
+                    totalSeconds--;
+                }else{
+                    bell.play()
+                    if (isBreak == false){
+                        isBreak = true;
+                        seconds = workoutItems[index]['break'];
+                        $("#currentWorkout").text("Rest");
+                    } else {
+                        index++;
+                        isBreak = false;
+                        seconds = workoutItems[index]['duration'];
+                        $("#currentWorkout").text(workoutItems[index]['label']);
+                        if (index < workoutItems.length - 1){
+                            $("#nextWorkout").text(workoutItems[index + 1]['label']);
+                        } else {
+                            $("#nextWorkout").text("Finished");
+                        }
+                    }
+                if (totalSeconds === 0){
+                    clearInterval(timer);
+                    isRunning = false;
+                    $("#currentWorkout").text("Finished");
+                    $("#nextWorkout").text("");
+                    }
+                };
+            }, 1000)
+        }
+        </script>
+    {% endblock %}
+    </body>
+</html>
