@@ -17,7 +17,7 @@ SECRET_KEY = '($eha57x2xr%i4u$vl&26m1p7=1#6dqgd1iu)8i)dy#vxc2eil'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['www.markusbarth.net', 'localhost']
+ALLOWED_HOSTS = ['markusbarth.net', 'www.markusbarth.net', 'localhost']
 
 
 # Application definition
