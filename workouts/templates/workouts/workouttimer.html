@@ -12,7 +12,9 @@
             </div>
             <div class="navbar-collapse w-100 order-3 dual-collapse2">
                     <div class="navbar-nav ml-auto">
-                        <a class="nav-item nav-link" href="{% url 'admin:index' %}" target="_blank">login</a>
+                        {% if request.user.is_authenticated %}
+                        <span class="navbar-text mr-2">logged in as {{request.user.first_name}} {{request.user.last_name}}</span>
+                        {% endif %}
                     </div>
             </div>
         </nav>

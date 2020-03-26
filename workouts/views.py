@@ -1,8 +1,17 @@
 from django.shortcuts import render
 from .models import Workout, WorkoutExercise, WorkoutType
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate, login, logout
 
 def index(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            logout(request)
+        else:
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
     context = {
         'selectedworkouttypes': [ int(x) for x in request.GET.getlist('workouttype')],
         'selectedworkoutdifficulties': [ int(x) for x in request.GET.getlist('workoutdifficulty')],
