@@ -6,6 +6,7 @@
                 <img src="{% static 'workouts/img/logo_white.svg' %}" width="30" height="30" alt="">
             </a>
             <div class="navbar-nav w-100 order-1 order-md-0 dual-collapse2">
+                <form action="{% url 'index' %}" method="GET">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'index' %}">Workouts</a>
@@ -15,12 +16,13 @@
                         <div class="dropdown-menu p-2" aria-labelledby="typedropdown">
                             {% for workouttype in workouttypelist %}
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="workouttype{{workouttype.id}}">
-                                <label class="form-check-label" for="dworkouttype{{workouttype.id}}">
+                                <input type="checkbox" class="form-check-input" name="workouttype" value="{{workouttype.id}}" id="workouttype{{workouttype.id}}" {% if workouttype.id in selectedworkouttypes %}checked="checked"{% endif %}>
+                                <label class="form-check-label" for="workouttype{{workouttype.id}}">
                                 {{workouttype.name}}
                                 </label>
                             </div>
                             {% endfor %}
+                            <button type="submit" class="btn btn-primary mt-2">Apply filters</button>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -28,12 +30,13 @@
                          <div class="dropdown-menu p-2" aria-labelledby="typedropdown">
                             {% for workoutdifficulty in workoutdifficultylist %}
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="workoutdifficulty{{workoutdifficulty.0}}">
+                                <input type="checkbox" class="form-check-input" name="workoutdifficulty" value="{{workoutdifficulty.0}}" id="workoutdifficulty{{workoutdifficulty.0}}" {% if workoutdifficulty.0 in selectedworkoutdifficulties %}checked="checked"{% endif %}>
                                 <label class="form-check-label" for="dworkouttype{{workouttype.id}}">
                                 {{workoutdifficulty.1}}
                                 </label>
                             </div>
                             {% endfor %}
+                            <button type="submit" class="btn btn-primary mt-2">Apply filters</button>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -41,15 +44,17 @@
                         <div class="dropdown-menu p-2" aria-labelledby="authordropdown">
                                 {% for user in userlist %}
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="user{{user.id}}">
+                                    <input type="checkbox" class="form-check-input" name="user" value={{user.id}} id="user{{user.id}}" {% if user.id in selectedusers %}checked="checked"{% endif %}>
                                     <label class="form-check-label" for="user{{user.id}}">
                                     {{user.first_name}} {{user.last_name}}
                                     </label>
                                 </div>
                                 {% endfor %}
+                                <button type="submit" class="btn btn-primary mt-2">Apply filters</button>
                             </div>
                     </li>
                 </ul>
+                </form>
             </div>
             <div class="navbar-collapse w-100 order-3 dual-collapse2">
                     <div class="navbar-nav ml-auto">
@@ -62,7 +67,13 @@
         <div class="container">
             {% for workout in workoutlist %}
             <div class="card mt-2">
-                <div class="card-header">{{workout.name}}</div>
+                <div class="card-header">
+                    <h5 class="card-title">{{workout.name}}</h5>
+                    <div class="card-text">
+                        <b>author:</b> {{workout.user.first_name}} {{workout.user.last_name}} | 
+                        <b>difficulty:</b> {{workout.get_difficulty_display}}
+                    </div>
+                </div>
                 <div class="card-body">
                     <p class="card-text">
                         {{workout.description}}
