@@ -20,9 +20,10 @@ class Workout(models.Model):
         (PRO, 'Pro/Specific')
     ]
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    public = models.BooleanField(default=True)
     workout_type = models.ForeignKey(WorkoutType, on_delete=models.PROTECT)
     name = models.CharField(max_length=30)
-    slug = models.SlugField(max_length=30)
+    slug = models.SlugField(max_length=40, unique=True)
     description = models.CharField(max_length=2048)
     difficulty = models.PositiveSmallIntegerField(choices=DIFFICULTY_CHOICES, default=BEGINNER)
 

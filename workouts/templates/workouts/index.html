@@ -53,6 +53,11 @@
                                 <button type="submit" class="btn btn-primary mt-2">Apply filters</button>
                             </div>
                     </li>
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                            <a class="nav-link" href="{% url 'addworkout' %}">New Workout</a>
+                        </li>
+                    {% endif %}
                 </ul>
                 </form>
             </div>
@@ -99,16 +104,26 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <p class="card-text">
-                        {{workout.description}}
-                    </p>
-                    <a class="btn btn-secondary m-1" data-toggle="collapse" href="#exerciselist{{workout.id}}" role="button" aria-expanded="false" aria-controls="exerciselist1">
-                        Show details
-                    </a>
-                    <a class="btn btn-secondary m-1" href="{% url 'workout' workout.slug%}" role="button" aria-expanded="false" aria-controls="exerciselist1">
-                        Start Workout
-                    </a>
-
+                    <div class="row">
+                        <div class="col-10">
+                            <p class="card-text">
+                                {{workout.description}}
+                            </p>
+                        </div>
+                        <div class="col-2">
+                            <a class="btn btn-secondary m-1 col-12" data-toggle="collapse" href="#exerciselist{{workout.id}}" role="button" aria-expanded="false" aria-controls="exerciselist1">
+                                Show details
+                            </a>
+                            {% if request.user.is_authenticated and request.user == workout.user %}
+                            <a class="btn btn-secondary m-1 col-12" href="{% url 'editworkout' workout.slug %}" role="button" aria-expanded="false" aria-controls="exerciselist1">
+                                Edit
+                            </a>
+                            {% endif %}
+                            <a class="btn btn-secondary m-1 col-12" href="{% url 'workout' workout.slug%}" role="button" aria-expanded="false" aria-controls="exerciselist1">
+                                Start Workout
+                            </a>
+                        </div>
+                    </div>
                     <div id="exerciselist{{workout.id}}" class="card mt-1 collapse">
                         <ul class="list-group list-group-flush">
                         {% for exercise in workout.exercises.all %}
