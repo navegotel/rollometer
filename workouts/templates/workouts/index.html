@@ -99,18 +99,20 @@
                 <div class="card-header">
                     <h5 class="card-title">{{workout.name}}</h5>
                     <div class="card-text">
-                        <b>author:</b> {{workout.user.first_name}} {{workout.user.last_name}} | 
-                        <b>difficulty:</b> {{workout.get_difficulty_display}}
+                        <small>
+                            <b>author:</b> {{workout.user.first_name}} {{workout.user.last_name}} | 
+                            <b>difficulty:</b> {{workout.get_difficulty_display}}
+                        </small>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-10">
+                        <div class="col-md-10">
                             <p class="card-text">
                                 {{workout.description}}
                             </p>
                         </div>
-                        <div class="col-2">
+                        <div class="col-md-2">
                             <a class="btn btn-secondary m-1 col-12" data-toggle="collapse" href="#exerciselist{{workout.id}}" role="button" aria-expanded="false" aria-controls="exerciselist1">
                                 Show details
                             </a>
