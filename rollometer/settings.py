@@ -15,7 +15,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '($eha57x2xr%i4u$vl&26m1p7=1#6dqgd1iu)8i)dy#vxc2eil'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['rollometer.markusbarth.net']
 
