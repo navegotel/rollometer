@@ -2,26 +2,14 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, TextInput, HiddenInput, Textarea, Select, CheckboxInput
+from django.forms import inlineformset_factory
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.utils.text import slugify
 from django.db.models import Q
 from .models import Workout, WorkoutExercise, WorkoutType
+from .forms import WorkoutForm, exercise_form_widgets
 
-class WorkoutForm(ModelForm):
-    class Meta:
-        model = Workout
-        # fields = ['slug', 'public', 'name', 'workout_type', 'difficulty', 'description']
-        fields = '__all__'
-        widgets = {
-            'user': HiddenInput(),
-            'slug': HiddenInput(),
-            'public': CheckboxInput(attrs={'class': 'form-check-input'}),
-            'description': Textarea(attrs={'class': 'form-control', 'rows': 3}),
-            'workout_type': Select(attrs={'class':'form-control'}),
-            'difficulty': Select(attrs={'class':'form-control'}),
-            'name': TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter workout name', 'aria-describedby': 'nameHelp'})
-        }
+
 
 def index(request):
     if request.method == 'POST':
@@ -68,7 +56,9 @@ def edit_workout(request, slug):
     if request.method == 'GET':
         workout = Workout.objects.get(slug__exact=slug)
         mainform =  WorkoutForm(instance=workout)
-        context = {'form': mainform}
+        ExerciseFormset = inlineformset_factory(Workout, WorkoutExercise, fields=('name', 'exercise', 'duration', 'pause'), widgets=exercise_form_widgets)
+        exercise_formset = ExerciseFormset(instance=workout)
+        context = {'form': mainform, 'formset': exercise_formset}
         return render(request, 'workouts/editworkout.html', context)   
     elif request.method == 'POST':
         workout = Workout.objects.get(slug__exact=slug)

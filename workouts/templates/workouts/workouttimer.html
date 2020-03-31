@@ -44,8 +44,12 @@
             },
         {% endfor %}
         ];
-        var bleep = new Audio("{% static 'workouts/snd/bleep001.mp3' %}")
+        //var bleep = new Audio("{% static 'workouts/snd/bleep001.mp3' %}")
         var bell = new Audio("{% static 'workouts/snd/bell001.mp3' %}")
+        var sndthirty = new Audio("{% static 'workouts/snd/thirty.mp3' %}")
+        var sndtwenty = new Audio("{% static 'workouts/snd/twenty.mp3' %}")
+        var sndten = new Audio("{% static 'workouts/snd/ten.mp3' %}")
+        var sndfive = new Audio("{% static 'workouts/snd/five.mp3' %}")
         var seconds = workoutItems[0]['duration'];
         var isRunning = false;
         var isBreak = false;
@@ -139,8 +143,15 @@
                 $("#seconds").text(scdStr);
                 $("#totalMinutes").text(ttlMntStr);
                 $("#totalSeconds").text(ttlScdStr);
-                if (seconds == 5){
-                    bleep.play();
+                switch (seconds){
+                    case 30:
+                        sndthirty.play();
+                    case 20:
+                        sndtwenty.play();
+                    case 10:
+                        sndten.play();
+                    case 5:
+                        sndfive.play();
                 }
                 if (seconds > 0){
                     seconds--;
