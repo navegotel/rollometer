@@ -4,7 +4,8 @@ from .models import Workout, WorkoutExercise
 exercise_form_widgets = {'name': TextInput(attrs={'class': 'form-control'}), 
                          'exercise': Select(attrs={'class': 'form-control'}), 
                          'duration': TextInput(attrs={'class': 'form-control', 'type': 'number'}),
-                         'pause': TextInput(attrs={'class': 'form-control', 'type': 'number'})}
+                         'pause': TextInput(attrs={'class': 'form-control', 'type': 'number'})
+                         }
 
 class WorkoutForm(ModelForm):
     class Meta:

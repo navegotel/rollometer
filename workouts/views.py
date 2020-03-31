@@ -53,21 +53,23 @@ def workout(request, slug):
 
 
 def edit_workout(request, slug):
+    workout = Workout.objects.get(slug__exact=slug)
+    ExerciseFormset = inlineformset_factory(Workout, WorkoutExercise, fields=('name', 'exercise', 'duration', 'pause'), widgets=exercise_form_widgets)
     if request.method == 'GET':
-        workout = Workout.objects.get(slug__exact=slug)
         mainform =  WorkoutForm(instance=workout)
-        ExerciseFormset = inlineformset_factory(Workout, WorkoutExercise, fields=('name', 'exercise', 'duration', 'pause'), widgets=exercise_form_widgets)
         exercise_formset = ExerciseFormset(instance=workout)
         context = {'form': mainform, 'formset': exercise_formset}
         return render(request, 'workouts/editworkout.html', context)   
     elif request.method == 'POST':
-        workout = Workout.objects.get(slug__exact=slug)
         mainform = WorkoutForm(request.POST, instance=workout)
         if mainform.is_valid():
             workout.save()
+        exercise_formset = ExerciseFormset(request.POST, instance=workout)
+        if exercise_formset.is_valid():
+            exercise_formset.save()
             return HttpResponseRedirect(reverse('index'))
         else:
-            context = {'form': mainform}
+            context = {'form': mainform, 'formset': exercise_formset}
             return render(request, 'workouts/editworkout.html', context)
 
 def add_workout(request):

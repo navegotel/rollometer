@@ -23,6 +23,8 @@
                     </div>
                 </div>
                 <div class="card m-2 p-2">
+                    {{formset.management_form}}
+                    {{formset.errors}}
                     <table class="table table-hover">
                         <thead>
                             <tr>
@@ -30,15 +32,17 @@
                                 <th>Type</th>
                                 <th>Duration</th>
                                 <th>Break</th>
+                                <th>DELETE</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for exercise in formset %}
                             <tr>
-                                <td style="width: 40%">{{ exercise.name }}</td>
+                                <td style="width: 40%">{{ exercise.id }}{{ exercise.name }}</td>
                                 <td style="width: 30%">{{ exercise.exercise }}</td>
-                                <td style="width: 15%">{{ exercise.duration }}</td>
-                                <td style="width: 15%">{{ exercise.pause }}</td>
+                                <td style="width: 10%">{{ exercise.duration }}</td>
+                                <td style="width: 10%">{{ exercise.pause }}</td>
+                                <td style="width: 10%">{{ exercise.DELETE }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
