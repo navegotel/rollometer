@@ -143,16 +143,15 @@
                 $("#seconds").text(scdStr);
                 $("#totalMinutes").text(ttlMntStr);
                 $("#totalSeconds").text(ttlScdStr);
-                switch (seconds){
-                    case 30:
-                        sndthirty.play();
-                    case 20:
-                        sndtwenty.play();
-                    case 10:
-                        sndten.play();
-                    case 5:
-                        sndfive.play();
-                }
+                if (seconds == 30){
+                    sndthirty.play();
+                }else if (second == 20){
+                    sndtwenty.play();
+                }else if (second == 10){
+                    sndten.play();
+                }else if (second == 5){
+                    sndfive.play();
+                };
                 if (seconds > 0){
                     seconds--;
                     totalSeconds--;
