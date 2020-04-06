@@ -27,6 +27,9 @@ class Workout(models.Model):
     description = models.CharField(max_length=2048)
     difficulty = models.PositiveSmallIntegerField(choices=DIFFICULTY_CHOICES, default=BEGINNER)
 
+    class Meta:
+        ordering = ('name', 'difficulty', )
+
     def __str__(self):
         return self.name
 
@@ -41,6 +44,9 @@ class Exercise(models.Model):
     description = models.TextField()
     gif = models.FileField(upload_to=exercise_gif_path, blank=True, null=True)
 
+    class Meta:
+        ordering = ('name',)
+
     def __str__(self):
         return self.name
 
@@ -51,6 +57,9 @@ class WorkoutExercise(models.Model):
     exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE, blank=True, null=True)
     duration = models.PositiveSmallIntegerField()
     pause = models.PositiveSmallIntegerField()
+
+    class Meta:
+        ordering = ('name',)
 
     def __str__(self):
         return self.name

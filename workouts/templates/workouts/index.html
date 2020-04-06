@@ -1,4 +1,5 @@
 {% extends "workouts/base.html" %}
+{% load md2 %}
 {% load static %}
     {% block nav %}
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
@@ -109,7 +110,7 @@
                     <div class="row">
                         <div class="col-md-10">
                             <p class="card-text">
-                                {{workout.description}}
+                                {{workout.description|markdown}}
                             </p>
                         </div>
                         <div class="col-md-2">
@@ -129,9 +130,14 @@
                     <div id="exerciselist{{workout.id}}" class="card mt-1 collapse">
                         <ul class="list-group list-group-flush">
                         {% for exercise in workout.exercises.all %}
-                            <li class="list-group-item"><span class="exercise-list-item"  data-toggle="popover" data-trigger="hover" data-content="{{exercise.exercise.description}}">{{exercise.name}}</span>, duration: {{exercise.duration}} sec., break: {{exercise.pause}} sec.</li>
+                            <li class="list-group-item"><span id="workoutitem-{{workout.id}}-{{exercise.id}}" class="exercise-list-item" data-trigger="hover" >{{exercise.name}}</span>, duration: {{exercise.duration}} sec., break: {{exercise.pause}} sec.</li>
                         {% endfor %}
                         </ul>
+                        {% for exercise in workout.exercises.all %}
+                        <div id="description-{{workout.id}}-{{exercise.exercise.id}}" class="rmtr-hidden" >
+                            {{exercise.exercise.description}}
+                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -141,7 +147,18 @@
     {% block script %}
         <script type="text/javascript">
         $( document ).ready(function() {
-            $(".exercise-list-item").popover({'placement':'right'});
+            /* $(".exercise-list-item").popover({'placement':'right'});*/
+            {% for workout in workoutlist %}
+                {% for exercise in workout.exercises.all %}
+                $("#workoutitem-{{workout.id}}-{{exercise.id}}").popover({
+                    placement:'right',
+                    html : true, 
+                    content: function() {
+                        return $("#description-{{workout.id}}-{{exercise.exercise.id}}").html();
+                    },
+                });
+                {% endfor %}
+            {% endfor %}
         });
         </script>
     {% endblock %}

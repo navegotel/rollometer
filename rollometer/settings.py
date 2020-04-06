@@ -24,6 +24,7 @@ ALLOWED_HOSTS = ['rollometer.markusbarth.net']
 
 INSTALLED_APPS = [
     'workouts',
+    'django_markdown2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
