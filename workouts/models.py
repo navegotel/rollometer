@@ -58,9 +58,6 @@ class WorkoutExercise(models.Model):
     duration = models.PositiveSmallIntegerField()
     pause = models.PositiveSmallIntegerField()
 
-    class Meta:
-        ordering = ('name',)
-
     def __str__(self):
         return self.name
 
