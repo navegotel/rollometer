@@ -135,7 +135,7 @@
                         </ul>
                         {% for exercise in workout.exercises.all %}
                         <div id="description-{{workout.id}}-{{exercise.exercise.id}}" class="rmtr-hidden" >
-                            {{exercise.exercise.description}}
+                            {{exercise.exercise.description|markdown}}
                         </div>
                         {% endfor %}
                     </div>
